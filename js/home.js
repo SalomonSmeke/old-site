@@ -27,10 +27,10 @@ function startTime() {
       c3 = "0"+c3;
     }
     document.getElementById('center-container').style.backgroundColor = "#" + c1 + c2 + c3;
-    var t = setTimeout(function(){startTime()},500);
+    var t = setTimeout(function(){ startTime(); },500);
 }
 
 function checkTime(i) {
-    if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
+    if (i<10) {i = "0" + i;}  // add zero in front of numbers < 10
     return i;
 }
