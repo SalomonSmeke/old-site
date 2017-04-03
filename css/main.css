@@ -3,7 +3,7 @@ html, body {
   height: 100vh;
   min-height: 365px;
   width: 100vw;
-  min-width: 505px;
+  min-width: 510px;
   color: #000000;
   padding: 0;
   margin: 0;
@@ -22,7 +22,7 @@ h2, h3{
 
 .about-me {
   text-align: right;
-  padding: 2% 5%;
+  padding: 25px 50px;
   background-color: #ffffff;
 }
 
@@ -60,16 +60,12 @@ h2, h3{
 .main-side{
   border-style: solid;
   width: 10%;
-  padding-top: 1%;
-  padding-bottom: 1%;
-  height: inherit;
-  float: left;
 }
 
 .name, .time{
   border-style: solid;
-  padding-top: 1%;
-  padding-bottom: 1%;
+  padding-top: 12px;
+  padding-bottom: 12px;
   border-top-width: 3px;
   border-bottom-width: 3px;
   border-left: 0;
@@ -83,18 +79,18 @@ h2, h3{
 
 .time{
   text-align: right;
-  padding-right: 1%;
+  padding-right: 5px;
 }
 
 .name{
   text-align: left;
-  padding-left: 1%;
+  padding-left: 5px;
 }
 
 .git, .more{
-  padding-top: 3%;
+  padding-top: 30px;
   width: 50%;
-  min-height: 40%;
+  height: 40%;
   float: left;
 }
 
