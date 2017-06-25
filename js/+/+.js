@@ -4,34 +4,34 @@ var steps, base, str, type;
 
 
 document.addEventListener("DOMContentLoaded", function() {
-  $('#R').click(function(){ R(); return false; });
-  $('#G').click(function(){ G(); return false; });
-  $('#B').click(function(){ B(); return false; });
+  $("#R").click(function(){ R(); return false; });
+  $("#G").click(function(){ G(); return false; });
+  $("#B").click(function(){ B(); return false; });
 
-  $('#more').click(function(){ moreV(); return false; });
-  $('#less').click(function(){ lessV(); return false; });
+  $("#more").click(function(){ moreV(); return false; });
+  $("#less").click(function(){ lessV(); return false; });
 
-  $('#morePerc').click(function(){ morePerc(); return false; });
-  $('#lessPerc').click(function(){ lessPerc(); return false; });
+  $("#morePerc").click(function(){ morePerc(); return false; });
+  $("#lessPerc").click(function(){ lessPerc(); return false; });
 
-  $('#moreNumber').click(function(){ moreC(); return false; });
-  $('#lessNumber').click(function(){ lessC(); return false; });
+  $("#moreNumber").click(function(){ moreC(); return false; });
+  $("#lessNumber").click(function(){ lessC(); return false; });
 
-  topOffset = document.getElementById('links').offsetHeight;
+  topOffset = document.getElementById("links").offsetHeight;
   initialize();
-  elem = document.getElementById('background-box');
+  elem = document.getElementById("background-box");
   params = {
     fullscreen: true
   };
   two = new Two(params).appendTo(elem);
   runMe();
   if (window.attachEvent) {
-    window.attachEvent('onresize', function() {
+    window.attachEvent("onresize", function() {
       runMe(top);
     });
   }
   else if (window.addEventListener) {
-    window.addEventListener('resize', function() {
+    window.addEventListener("resize", function() {
       runMe(top);
     }, true);
   }
@@ -202,7 +202,7 @@ function generate(){
 function runMe() {
   height = document.body.scrollHeight-topOffset;
   width = document.body.scrollWidth*2;
-  document.getElementById('interactions-container').style.top = window.innerHeight/2 - (document.getElementById('interactions-container').offsetHeight/2) + topOffset/2 + 'px';
+  document.getElementById("interactions-container").style.top = window.innerHeight/2 - (document.getElementById("interactions-container").offsetHeight/2) + topOffset/2 + "px";
 
   two.appendTo(elem);
   two.clear();
@@ -210,24 +210,24 @@ function runMe() {
   gene = gen.getGenerated();
 
   if(pivot==0){
-    document.getElementById('more').style.color = "#ff0000";
-    document.getElementById('less').style.color = "#ff0000";
+    document.getElementById("more").style.color = "#ff0000";
+    document.getElementById("less").style.color = "#ff0000";
   }
   if(pivot==1){
-    document.getElementById('more').style.color = "#00ff00";
-    document.getElementById('less').style.color = "#00ff00";
+    document.getElementById("more").style.color = "#00ff00";
+    document.getElementById("less").style.color = "#00ff00";
   }
   if(pivot==2){
-    document.getElementById('more').style.color = "#0000ff";
-    document.getElementById('less').style.color = "#0000ff";
+    document.getElementById("more").style.color = "#0000ff";
+    document.getElementById("less").style.color = "#0000ff";
   }
 
   rects = [];
   for (var i = 0; i < steps; i++) {
     rects[i] = two.makeRectangle(0, (height / steps * (i+.5))+topOffset, width, height/steps);
-    rects[i].fill = '#' + gene[i];
+    rects[i].fill = "#" + gene[i];
     rects[i].opacity = 1;
-    rects[i].stroke = '#' + gene[i];
+    rects[i].stroke = "#" + gene[i];
     rects[i].lineWidth = 1;
   }
   two.update();
