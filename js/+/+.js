@@ -94,13 +94,13 @@ function setV(value){
   while (v3.length !== 2){
     v3 = "0"+v3;
   }
-  if (pivot == 0){
+  if (pivot === 0){
     return ""+value+v2+v3;
   }
-  if (pivot == 1){
+  if (pivot === 1){
     return ""+v1+value+v3;
   }
-  if (pivot == 2){
+  if (pivot ===2){
     return ""+v1+v2+value;
   }
 }
