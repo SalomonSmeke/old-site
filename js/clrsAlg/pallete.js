@@ -8,27 +8,55 @@ var pivot = 0;
 
 function LWGenPallete() {
 }
+
+function toInt(hex) {
+  return parseInt(hex, 16);
+}
+function toHex(decimal, minLength) {
+  var out = decimal.toString(16);
+  while (out.length<minLength){
+    out = "0" + out;
+  }
+  return out;
+}
+function colorToInts(hex) {
+  var out = [];
+  for (var i = 0; i < 3; i++){
+    out[i] = toInt(hex.substring(2*i, 2*(i+1)));
+  }
+  return out;
+}
+function intsToColor(color) {
+  var out = "";
+  for (var i = 0; i < 3; i++){
+    out += toHex(color[i],2);
+  }
+  return out;
+}
+
 LWGenPallete.prototype.setBase = function(hex) {
-  if (hex.length == 6){
+  if (hex.length === 6){
     base = colorToInts(hex);
     return true;
   }
   return false;
 };
+
 LWGenPallete.prototype.setBaseS = function(hex) {
   if (hex.length == 6){
     var big = 0;
     base = colorToInts(hex);
-    for (var i = 0; i < base.length; i++){
-      if (base[i]>big){
-        big = base[i];
+    base.forEach(function (b, i) {
+      if ( b> big){
+        big = b;
         pivot = i;
       }
-    }
+    });
     return true;
   }
   return false;
 };
+
 LWGenPallete.prototype.setSteps = function(s) {
   if (s>=2 && s<256){
     steps = s;
@@ -36,6 +64,7 @@ LWGenPallete.prototype.setSteps = function(s) {
   }
   return false;
 };
+
 LWGenPallete.prototype.setStrength = function(s) {
   if (s <= 100 && s >= 0){
     strength = s;
@@ -43,6 +72,7 @@ LWGenPallete.prototype.setStrength = function(s) {
   }
   return false;
 };
+
 LWGenPallete.prototype.setPivot = function(p) {
   if (p <= 2 && p >= 0){
     pivot = p;
@@ -50,31 +80,35 @@ LWGenPallete.prototype.setPivot = function(p) {
   }
   return false;
 };
+
 LWGenPallete.prototype.getGenerated = function() {
   return generatedColors;
 };
+
 LWGenPallete.prototype.getBase = function() {
   return base;
 };
+
 LWGenPallete.prototype.getSteps = function() {
   return steps;
 };
+
 LWGenPallete.prototype.getStrength = function() {
   return strength;
 };
+
 LWGenPallete.prototype.getPivot = function() {
   return pivot;
 };
 
 LWGenPallete.prototype.toString = function() {
   var out = "";
-  var temp;
-  for (var i = 0; i < generatedColors.length; i++){
-    temp = intsToColor(generatedColors[i]);
-    out += temp + '\n';
-  }
+  generatedColors.forEach(function(g) {
+    out += intsToColor(g) + "\n";
+  });
   return out;
 };
+
 LWGenPallete.prototype.clear = function() {
   generatedColors = [];
   base = [255,255,255];
@@ -85,12 +119,17 @@ LWGenPallete.prototype.clear = function() {
 
 function intervals(input) {
   var out = [];
-  for (var i = 0; i < steps; i++) out[i] = Math.round(input - ((input*strength/100.0)/(steps-1))*i);
+  for (var i = 0; i < steps; i++) {
+    out.push(Math.round(input - ((input*strength/100.0)/(steps-1))*i));
+  }
   return out;
 }
+
 function intervalsR(input) {
   var out = [];
-  for (var i = 0; i < steps; i++) out[i] = (input + (((255-input)*strength/100.0)/(steps-1))*i);
+  for (var i = 0; i < steps; i++) {
+    out.push(input + (((255-input)*strength/100.0)/(steps-1))*i);
+  }
   return out;
 }
 
@@ -114,6 +153,7 @@ LWGenPallete.prototype.linear = function() {
   }
   return toString();
 };
+
 LWGenPallete.prototype.linearR = function() {
   generatedColors = [];
   var clrs = intervalsR(base[pivot]);
@@ -134,6 +174,7 @@ LWGenPallete.prototype.linearR = function() {
   }
   return toString();
 };
+
 LWGenPallete.prototype.distill = function(input) {
   generatedColors = [];
   var one = 0;
@@ -173,6 +214,7 @@ LWGenPallete.prototype.distill = function(input) {
   }
   return toString();
 };
+
 LWGenPallete.prototype.distillR = function(input) {
   generatedColors = [];
   var one = 0;
@@ -212,6 +254,7 @@ LWGenPallete.prototype.distillR = function(input) {
   }
   return toString();
 };
+
 LWGenPallete.prototype.shade = function(input) {
   generatedColors = [];
   //Create intervals on each value
@@ -224,6 +267,7 @@ LWGenPallete.prototype.shade = function(input) {
   }
   return toString();
 };
+
 LWGenPallete.prototype.shadeR = function(input) {
   generatedColors = [];
   //Create intervals on each value
@@ -236,28 +280,3 @@ LWGenPallete.prototype.shadeR = function(input) {
   }
   return toString();
 };
-
-function colorToInts(hex) {
-  var out = [];
-  for (var i = 0; i < 3; i++){
-    out[i] = toInt(hex.substring(2*i, 2*(i+1)));
-  }
-  return out;
-}
-function intsToColor(color) {
-  var out = "";
-  for (var i = 0; i < 3; i++){
-    out += toHex(color[i],2);
-  }
-  return out;
-}
-function toInt(hex) {
-  return parseInt(hex, 16);
-}
-function toHex(decimal, minLength) {
-  var out = decimal.toString(16);
-  while (out.length<minLength){
-    out = "0" + out;
-  }
-  return out;
-}

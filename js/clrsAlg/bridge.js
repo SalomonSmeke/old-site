@@ -9,16 +9,49 @@ var strength = 100;
 function LWGenBridge() {
 }
 
+function toInt(hex) {
+  return parseInt(hex, 16);
+}
+
+function toHex(decimal, minLength) {
+  var out = decimal.toString(16);
+  while (out.length<minLength){
+    out = "0" + out;
+  }
+  return out;
+}
+
+function colorToInts(hex) {
+  var out = [];
+  for (var i = 0; i < 3; i++){
+    out.push(toInt(hex.substring(2*i, 2*(i+1))));
+  }
+  return out;
+}
+
+function intsToColor(color) {
+  var out = "";
+  color.forEach(function (c) {
+    out += toHex(c,2);
+  });
+  return out;
+}
+
 LWGenBridge.prototype.setBasesBridge = function(hex) {
-  if (hex.length!=2){
+  if (hex.length!==2){
     return false;
   }
-  if (hex[0].length == 6 && hex[1].length == 6){
+  var valid = hex.filter(function (h) {
+    return h.length === 6;
+  }).length === 2
+
+  if (valid){
     base0 = colorToInts(hex[0]);
     base1 = colorToInts(hex[1]);
-    return true;
+    return valid;
   }
-  return false;
+
+  return valid;
 };
 LWGenBridge.prototype.setStepsBridge = function(s) {
   if (s>=2 && s<256){
@@ -58,7 +91,9 @@ LWGenBridge.prototype.clearBridge = function() {
 function intervalsBridge(input, min) {
   var out = [];
   var delta = input-min;
-  for (var i = 0; i < steps; i++) out[i] = (input - ((delta*strength/100.0)/(steps-1))*i);
+  for (var i = 0; i < steps; i++) {
+    out.push(input - ((delta*strength/100.0)/(steps-1))*i);
+  }
   return out;
 }
 
@@ -70,32 +105,7 @@ LWGenBridge.prototype.bridge = function(input) {
   var	clrs2 = intervalsBridge(base0[2],base1[2]); //b ""
 
   for (var i = 0; i < steps; i++){
-    generatedColors [i] = intsToColor(clrs0[i],clrs1[i],clrs2[i]);
+    generatedColors.push(intsToColor(clrs0[i],clrs1[i],clrs2[i]));
   }
   return toString();
 };
-
-function colorToInts(hex) {
-  var out = [];
-  for (var i = 0; i < 3; i++){
-    out[i] = toInt(hex.substring(2*i, 2*(i+1)));
-  }
-  return out;
-}
-function intsToColor(color) {
-  var out = "";
-  for (var i = 0; i < 3; i++){
-    out += toHex(color[i],2);
-  }
-  return out;
-}
-function toInt(hex) {
-  return parseInt(hex, 16);
-}
-function toHex(decimal, minLength) {
-  var out = decimal.toString(16);
-  while (out.length<minLength){
-    out = "0" + out;
-  }
-  return out;
-}
