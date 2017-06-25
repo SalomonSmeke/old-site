@@ -2,43 +2,39 @@ var elem, two, gen, height, width, params, gene, rects, topOffset, pivot;
 var steps, base, str, type;
 
 
+function runMe() {
+  height = document.body.scrollHeight-topOffset;
+  width = document.body.scrollWidth*2;
+  document.getElementById("interactions-container").style.top = window.innerHeight/2 - (document.getElementById("interactions-container").offsetHeight/2) + topOffset/2 + "px";
 
-document.addEventListener("DOMContentLoaded", function() {
-  $("#R").click(function(){ R(); return false; });
-  $("#G").click(function(){ G(); return false; });
-  $("#B").click(function(){ B(); return false; });
+  two.appendTo(elem);
+  two.clear();
+  generate();
+  gene = gen.getGenerated();
 
-  $("#more").click(function(){ moreV(); return false; });
-  $("#less").click(function(){ lessV(); return false; });
-
-  $("#morePerc").click(function(){ morePerc(); return false; });
-  $("#lessPerc").click(function(){ lessPerc(); return false; });
-
-  $("#moreNumber").click(function(){ moreC(); return false; });
-  $("#lessNumber").click(function(){ lessC(); return false; });
-
-  topOffset = document.getElementById("links").offsetHeight;
-  initialize();
-  elem = document.getElementById("background-box");
-  params = {
-    fullscreen: true
-  };
-  two = new Two(params).appendTo(elem);
-  runMe();
-  if (window.attachEvent) {
-    window.attachEvent("onresize", function() {
-      runMe(top);
-    });
+  if(pivot==0){
+    document.getElementById("more").style.color = "#ff0000";
+    document.getElementById("less").style.color = "#ff0000";
   }
-  else if (window.addEventListener) {
-    window.addEventListener("resize", function() {
-      runMe(top);
-    }, true);
+  if(pivot==1){
+    document.getElementById("more").style.color = "#00ff00";
+    document.getElementById("less").style.color = "#00ff00";
   }
-  else {
-    //The browser does not support Javascript event binding
+  if(pivot==2){
+    document.getElementById("more").style.color = "#0000ff";
+    document.getElementById("less").style.color = "#0000ff";
   }
-});
+
+  rects = gene.map(function (g, i) {
+    var temp = two.makeRectangle(0, (height / steps * (i+.5))+topOffset, width, height/steps);
+    temp.fill = "#" + g;
+    temp.opacity = 1;
+    temp.stroke = "#" + g;
+    temp.lineWidth = 1;
+    return temp;
+  });
+  two.update();
+}
 
 function morePerc(){
   str += 5;
@@ -123,21 +119,6 @@ function setV(value){
   }
 }
 
-function R(){
-  pivot = 0;
-  runMe();
-}
-
-function G(){
-  pivot = 1;
-  runMe();
-}
-
-function B(){
-  pivot = 2;
-  runMe();
-}
-
 function initialize(){
   var today=new Date();
   var h=checkTime(today.getHours());
@@ -176,59 +157,61 @@ function checkTime(i) {
 
 function generate(){
   gen.setBase(base);
-    gen.setSteps(steps);
-    gen.setStrength(str);
-    gen.setPivot(pivot);
-  if (type==0){
-    gen.linear();
-  }
-  if (type==1){
-    gen.linearR();
-  }
-  if (type==2){
-    gen.distill();
-  }
-  if (type==3){
-    gen.distillR();
-  }
-  if (type==4){
-    gen.shade();
-  }
-  if (type==5){
-    gen.shadeR();
-  }
+  gen.setSteps(steps);
+  gen.setStrength(str);
+  gen.setPivot(pivot);
+  [
+    gen.linear,
+    gen.linearR,
+    gen.distill,
+    gen.distillR,
+    gen.shade,
+    gen.shadeR
+  ][type]();
 }
 
-function runMe() {
-  height = document.body.scrollHeight-topOffset;
-  width = document.body.scrollWidth*2;
-  document.getElementById("interactions-container").style.top = window.innerHeight/2 - (document.getElementById("interactions-container").offsetHeight/2) + topOffset/2 + "px";
+function R(){
+  pivot = 0;
+  runMe();
+}
 
-  two.appendTo(elem);
-  two.clear();
-  generate();
-  gene = gen.getGenerated();
+function G(){
+  pivot = 1;
+  runMe();
+}
 
-  if(pivot==0){
-    document.getElementById("more").style.color = "#ff0000";
-    document.getElementById("less").style.color = "#ff0000";
-  }
-  if(pivot==1){
-    document.getElementById("more").style.color = "#00ff00";
-    document.getElementById("less").style.color = "#00ff00";
-  }
-  if(pivot==2){
-    document.getElementById("more").style.color = "#0000ff";
-    document.getElementById("less").style.color = "#0000ff";
-  }
+function B(){
+  pivot = 2;
+  runMe();
+}
 
-  rects = [];
-  for (var i = 0; i < steps; i++) {
-    rects[i] = two.makeRectangle(0, (height / steps * (i+.5))+topOffset, width, height/steps);
-    rects[i].fill = "#" + gene[i];
-    rects[i].opacity = 1;
-    rects[i].stroke = "#" + gene[i];
-    rects[i].lineWidth = 1;
-  }
-  two.update();
+[
+  { id: "R", f: R },
+  { id: "G", f: G },
+  { id: "B", f: B },
+  { id: "more", f: moreV },
+  { id: "less", f: lessV },
+  { id: "morePerc", f: morePerc },
+  { id: "lessPerc", f: lessPerc },
+  { id: "moreNumber", f: moreC },
+  { id: "lessNumber", f: lessC }
+].forEach(function ({id, f}){ $("#" + id).click(f); });
+
+topOffset = document.getElementById("links").offsetHeight;
+initialize();
+elem = document.getElementById("background-box");
+params = {
+  fullscreen: true
+};
+two = new Two(params).appendTo(elem);
+runMe();
+if (window.attachEvent) {
+  window.attachEvent("onresize", function() {
+    runMe(top);
+  });
+}
+else if (window.addEventListener) {
+  window.addEventListener("resize", function() {
+    runMe(top);
+  }, true);
 }

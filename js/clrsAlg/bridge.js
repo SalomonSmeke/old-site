@@ -43,7 +43,7 @@ LWGenBridge.prototype.setBasesBridge = function(hex) {
   }
   var valid = hex.filter(function (h) {
     return h.length === 6;
-  }).length === 2
+  }).length === 2;
 
   if (valid){
     base0 = colorToInts(hex[0]);
