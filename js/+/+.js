@@ -1,6 +1,20 @@
 var elem, two, gen, height, width, params, gene, rects, topOffset, pivot;
 var steps, base, str, type;
 
+function generate(){
+  gen.setBase(base);
+  gen.setSteps(steps);
+  gen.setStrength(str);
+  gen.setPivot(pivot);
+  [
+    gen.linear,
+    gen.linearR,
+    gen.distill,
+    gen.distillR,
+    gen.shade,
+    gen.shadeR
+  ][type]();
+}
 
 function runMe() {
   height = document.body.scrollHeight-topOffset;
@@ -11,19 +25,11 @@ function runMe() {
   two.clear();
   generate();
   gene = gen.getGenerated();
+  var colorArr = ["00", "00", "00"];
+  colorArr[pivot] = "ff";
 
-  if(pivot==0){
-    document.getElementById("more").style.color = "#ff0000";
-    document.getElementById("less").style.color = "#ff0000";
-  }
-  if(pivot==1){
-    document.getElementById("more").style.color = "#00ff00";
-    document.getElementById("less").style.color = "#00ff00";
-  }
-  if(pivot==2){
-    document.getElementById("more").style.color = "#0000ff";
-    document.getElementById("less").style.color = "#0000ff";
-  }
+  document.getElementById("more").style.color = "#"+colorArr.join();
+  document.getElementById("less").style.color = "#"+colorArr.join();
 
   rects = gene.map(function (g, i) {
     var temp = two.makeRectangle(0, (height / steps * (i+.5))+topOffset, width, height/steps);
@@ -66,11 +72,44 @@ function lessC(){
   runMe();
 }
 
+function getV(){
+  var value = base[pivot];
+  return value;
+}
+
+function setV(value){
+  var v1 = base[0].toString(16);
+  var v2 = base[1].toString(16);
+  var v3 = base[2].toString(16);
+  value = value.toString(16);
+  while (value.length !== 2){
+    value =  "0"+value;
+  }
+  while (v1.length !== 2){
+    v1 = "0"+v1;
+  }
+  while (v2.length !== 2){
+    v2 = "0"+v2;
+  }
+  while (v3.length !== 2){
+    v3 = "0"+v3;
+  }
+  if (pivot == 0){
+    return ""+value+v2+v3;
+  }
+  if (pivot == 1){
+    return ""+v1+value+v3;
+  }
+  if (pivot == 2){
+    return ""+v1+v2+value;
+  }
+}
+
 function moreV(){
   var value = getV();
   value += 5;
   if (value > 255){
-    value=255;
+    value = 255;
   }
   base = setV(value);
   runMe();
@@ -86,37 +125,9 @@ function lessV(){
   runMe();
 }
 
-function getV(){
-  var value =base[pivot];
-  return value;
-}
-
-function setV(value){
-  var v1 = base[0].toString(16);
-  var v2 = base[1].toString(16);
-  var v3 = base[2].toString(16);
-  value = value.toString(16);
-  while (value.length != 2){
-    value =  "0"+value;
-  }
-  while (v1.length != 2){
-    v1 = "0"+v1;
-  }
-  while (v2.length != 2){
-    v2 = "0"+v2;
-  }
-  while (v3.length != 2){
-    v3 = "0"+v3;
-  }
-  if (pivot == 0){
-    return ""+value+v2+v3;
-  }
-  if (pivot == 1){
-    return ""+v1+value+v3;
-  }
-  if (pivot == 2){
-    return ""+v1+v2+value;
-  }
+function checkTime(i) {
+  if (i<10) {i = "0" + i;}  // add zero in front of numbers < 10
+  return i;
 }
 
 function initialize(){
@@ -129,13 +140,13 @@ function initialize(){
   var c1 = Math.round(twentyFour*h).toString(16);
   var c2 = Math.round(sixty*m).toString(16);
   var c3 = Math.round(sixty*s).toString(16);
-  while (c1.length!=2){
+  while (c1.length!==2){
     c1 = "0"+c1;
   }
-  while (c2.length!=2){
+  while (c2.length!==2){
     c2 = "0"+c2;
   }
-  while (c3.length!=2){
+  while (c3.length!==2){
     c3 = "0"+c3;
   }
   gen = new LWGenPallete();
@@ -148,26 +159,6 @@ function initialize(){
   pivot = gen.getPivot();
   gen.setSteps(steps);
   gen.setStrength(str);
-}
-
-function checkTime(i) {
-  if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
-  return i;
-}
-
-function generate(){
-  gen.setBase(base);
-  gen.setSteps(steps);
-  gen.setStrength(str);
-  gen.setPivot(pivot);
-  [
-    gen.linear,
-    gen.linearR,
-    gen.distill,
-    gen.distillR,
-    gen.shade,
-    gen.shadeR
-  ][type]();
 }
 
 function R(){

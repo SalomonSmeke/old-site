@@ -22,15 +22,15 @@ function toHex(decimal, minLength) {
 function colorToInts(hex) {
   var out = [];
   for (var i = 0; i < 3; i++){
-    out[i] = toInt(hex.substring(2*i, 2*(i+1)));
+    out.push(toInt(hex.substring(2*i, 2*(i+1))));
   }
   return out;
 }
 function intsToColor(color) {
   var out = "";
-  for (var i = 0; i < 3; i++){
-    out += toHex(color[i],2);
-  }
+  color.forEach(function (c) {
+    out += toHex(c,2);
+  });
   return out;
 }
 
@@ -43,11 +43,11 @@ LWGenPallete.prototype.setBase = function(hex) {
 };
 
 LWGenPallete.prototype.setBaseS = function(hex) {
-  if (hex.length == 6){
+  if (hex.length === 6){
     var big = 0;
     base = colorToInts(hex);
     base.forEach(function (b, i) {
-      if ( b> big){
+      if (b > big){
         big = b;
         pivot = i;
       }
