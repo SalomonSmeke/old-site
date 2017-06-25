@@ -1,3 +1,8 @@
+function checkTime(i) {
+    if (i<10) {i = "0" + i;}  // add zero in front of numbers < 10
+    return i;
+}
+
 function startTime() {
     var today=new Date();
     var h=checkTime(today.getHours());
@@ -17,11 +22,6 @@ function startTime() {
     });
     document.getElementById("center-container").style.backgroundColor = backgroundColor;
     var t = setTimeout(function(){ startTime(); },500);
-}
-
-function checkTime(i) {
-    if (i<10) {i = "0" + i;}  // add zero in front of numbers < 10
-    return i;
 }
 
 startTime();
